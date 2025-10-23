@@ -1,0 +1,51 @@
+Görüntüde gördüğüm sorunları anlıyorum. "249 Saat" sabit değeri yerine safety-calendar widget'ındaki güvenli gün sayısını dinamik olarak göstermemiz gerekiyor. SafetyCalendar component'ından güvenli gün sayısını alıp KPI widget'ında gösterelim.
+
+İlk olarak SafetyCalendar'dan güvenli gün sayısını dışarıya aktaracak bir hook oluşturalım:
+
+client/src/hooks/use-safety-days.ts
+Create hook to track safe days from safety calendar
+Şimdi CombinedKpiWidget component'ını güncelleyerek dinamik güvenli gün sayısını kullanalım:
+
+client/src/components/combined-kpi-widget.tsx
+Update safety KPI to show dynamic safe days, Make safety KPI dynamic based on calendar data
+StationWidgetDashboard component'ında da aynı dinamik değeri kullanalım:
+
+client/src/components/station-widget-dashboard.tsx
+Import useSafetyDays hook, Add safety days hook to station dashboard, Update safety KPI to show dynamic safe days in station widgets, Update display value in KPI widget
+Bu değişikliklerle:
+
+Dinamik Güvenli Gün Sayısı: SafetyCalendar widget'ındaki güvenli gün sayısı artık KPI kartlarında dinamik olarak gösterilecek
+Gerçek Zamanlı Güncelleme: Kullanıcı takvimde işaretleme yaptığında KPI değeri otomatik olarak güncellenecek
+Doğru Gösterim: "249 Saat" yerine "X Gün" formatında güvenli gün sayısı gösterilecek
+Yüzdelik Hesaplama: Ayın kaçıncı gününde olduğumuza göre güvenli gün yüzdesi hesaplanacak
+Artık safety calendar'da yapılan değişiklikler KPI genel bakış sayfasında da dinamik olarak yansıyacak.
+
+benzer uygulamayı kalite KPI için yapmamız gerekiyor. 64% yerine Müşteri şikayeti olmayan gün sayısını gösterelim ve dinamik olarak değişssin .
+
+HF
+
+heastrfyer
+Assistant
+just now
+Anladım! Kalite KPI'sında "64%" yerine müşteri şikayeti olmayan gün sayısını gösterecek ve kalite takvimine işaretleme yapıldıkça dinamik olarak güncellenecek şekilde düzenleyeceğim.
+
+Önce kalite takviminden şikayet olmayan günleri hesaplayan bir hook oluşturalım:
+
+client/src/hooks/use-quality-days.ts
+Add hook for quality days calculation
+Şimdi combined-kpi-widget.tsx dosyasını güncelleyerek kalite KPI'sını dinamik hale getirelim:
+
+client/src/components/combined-kpi-widget.tsx
+Update quality KPI to use dynamic complaint-free days, Use quality days hook in component, Update quality KPI data to be dynamic
+Son olarak station-widget-dashboard.tsx dosyasını da güncelleyelim:
+
+client/src/components/station-widget-dashboard.tsx
+Import quality days hook in station dashboard, Use quality days hook in station dashboard, Update quality category calculation
+Artık kalite KPI'sı da güvenlik KPI'sı gibi dinamik olarak çalışacak:
+
+useQualityDays hook'u kalite takvimindeki "satisfied" (memnun müşteri) günlerini sayar
+Kalite takviminde kullanıcı işaretleme yaptıkça bu değer otomatik güncellenir
+KPI kartında "64%" yerine "X Gün" formatında şikayetsiz gün sayısı gösterilir
+Yüzde hesaplaması: (şikayetsiz gün sayısı / toplam gün sayısı) * 100
+Durum renkleri: %90+ yeşil, %75-89 sarı, %75'in altı kırmızı
+Bu şekilde kalite widget'ı da tamamen dinamik hale geldi ve kullanıcı takvime işaretleme yaptıkça hem değer hem de yüzde otomatik olarak güncellenecek.
